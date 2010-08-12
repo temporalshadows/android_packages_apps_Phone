@@ -229,6 +229,12 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
     private static Vibrator mVibrator = null;
     private static AlarmManager mAM;
 
+<<<<<<< HEAD:src/com/android/phone/PhoneApp.java
+=======
+    //for adding to Blacklist from call log 
+    private static final String INSERT_BLACKLIST = "com.android.phone.INSERT_BLACKLIST";
+
+>>>>>>> upstream/froyo:src/com/android/phone/PhoneApp.java
     public void startVib45(long callDurationMsec) {
         if (VDBG) Log.i(LOG_TAG, "vibrate start @" + callDurationMsec);
         stopVib45();
@@ -460,8 +466,8 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
             // before registering for phone state changes
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
-                    | PowerManager.ACQUIRE_CAUSES_WAKEUP
-                    | PowerManager.ON_AFTER_RELEASE, LOG_TAG);
+                    | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                    LOG_TAG);
             // lock used to keep the processor awake, when we don't care for the display.
             mPartialWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
                     | PowerManager.ON_AFTER_RELEASE, LOG_TAG);
@@ -520,7 +526,12 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
             intentFilter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
             intentFilter.addAction(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED);
             intentFilter.addAction(ACTION_VIBRATE_45);
+<<<<<<< HEAD:src/com/android/phone/PhoneApp.java
             if (mTtyEnabled) {
+=======
+            intentFilter.addAction(INSERT_BLACKLIST);
+	    if (mTtyEnabled) {
+>>>>>>> upstream/froyo:src/com/android/phone/PhoneApp.java
                 intentFilter.addAction(TtyIntent.TTY_PREFERRED_MODE_CHANGE_ACTION);
             }
             intentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
@@ -1551,7 +1562,9 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
                 if(ringerMode == AudioManager.RINGER_MODE_SILENT) {
                     notifier.silenceRinger();
                 }
-            }
+            }else if (action.equals(INSERT_BLACKLIST)) {
+	    	PhoneApp.getInstance().getSettings().addBlackList(intent.getStringExtra("Insert.BLACKLIST"));
+	    }
         }
     }
 
@@ -1733,5 +1746,14 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
                     + ar.exception);
         }
         phone.queryTTYMode(mHandler.obtainMessage(EVENT_TTY_MODE_GET));
+    }
+
+    /* package */ void clearUserActivityTimeout() {
+        try {
+            mPowerManagerService.clearUserActivityTimeout(SystemClock.uptimeMillis(),
+                    10*1000 /* 10 sec */);
+        } catch (RemoteException ex) {
+            // System process is dead.
+        }
     }
 }
