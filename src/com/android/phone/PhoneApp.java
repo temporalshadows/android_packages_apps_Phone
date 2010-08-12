@@ -1232,7 +1232,8 @@ public class PhoneApp extends Application implements AccelerometerListener.Orien
                             || PhoneUtils.isSpeakerOn(this)
                             || ((mBtHandsfree != null) && mBtHandsfree.isAudioOn())
                             || mIsHardKeyboardOpen
-                            || mOrientation == AccelerometerListener.ORIENTATION_HORIZONTAL);
+                            || ((mOrientation == AccelerometerListener.ORIENTATION_HORIZONTAL) &&
+                               mSettings.mHorizProx));
 
                 if (((state == Phone.State.OFFHOOK) || mBeginningCall) && !screenOnImmediately) {
                     // Phone is in use!  Arrange for the screen to turn off

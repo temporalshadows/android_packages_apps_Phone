@@ -66,6 +66,11 @@
 
 <!--  Created and modified by cytown@gmail.com for modified Phone app usage -->
 <PreferenceCategory android:key="pref_advanced_settings" android:title="@string/advanced_setting">
+       <CheckBoxPreference
+        android:key="button_horizontal_proximity"
+        android:title="@string/horizontal_proximity"
+        android:persistent="false"
+        android:summary="@string/horizontal_proximity_sum"/>
     <CheckBoxPreference
         android:key="button_vibrate_outgoing"
         android:title="@string/vibrate_outgoing"

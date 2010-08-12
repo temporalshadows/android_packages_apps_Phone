@@ -372,6 +372,11 @@ public class CallFeaturesSetting extends PreferenceActivity
     // query the existing forwarding settings.
     private CallForwardInfo[] mNewFwdSettings;
     String mNewVMNumber;
+    
+    //Horizontal proximity sensor setting
+    private static final String BUTTON_HORIZONTAL_PROXIMITY = "button_horizontal_proximity";
+    private CheckBoxPreference mButtonHorizProx;
+    static boolean mHorizProx;
 
 // add by cytown for vibrate
 private static CallFeaturesSetting mInstance = null;
@@ -1478,7 +1483,7 @@ case ADD_BLACK_LIST_ID:
         }
         updateVoiceNumberField();
         mVMProviderSettingsForced = false;
-
+  
 // add by cytown for vibrate
 init(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
 mButtonVibOutgoing = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_OUTGOING);
@@ -1501,6 +1506,11 @@ mButtonLeftHand    = (CheckBoxPreference) prefSet.findPreference(BUTTON_LEFT_HAN
 mButtonLeftHand.setChecked(mLeftHand);
 mButtonVibCallWaiting = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_CALL_WAITING);
 mButtonVibCallWaiting.setChecked(mVibCallWaiting);
+
+//Horizontal proximity setting
+mButtonHorizProx = (CheckBoxPreference) prefSet.findPreference(BUTTON_HORIZONTAL_PROXIMITY);
+mButtonHorizProx.setChecked(mHorizProx);
+
 mButtonForceTouch  = (CheckBoxPreference) prefSet.findPreference(BUTTON_FORCE_TOUCH);
 if (getResources().getBoolean(R.bool.allow_in_call_touch_ui)) {
     // don't know why removePreference always return false and not working.... if someone knows just mail me.
@@ -1855,6 +1865,7 @@ private void init(SharedPreferences pref) {
     mTurnSilence = pref.getBoolean(BUTTON_TURN_SILENCE, false);
     mLeftHand = pref.getBoolean(BUTTON_LEFT_HAND, false);
     mVibCallWaiting = pref.getBoolean(BUTTON_VIBRATE_CALL_WAITING, false);
+    mHorizProx = pref.getBoolean(BUTTON_HORIZONTAL_PROXIMITY, false);
     mForceTouch  = pref.getBoolean(BUTTON_FORCE_TOUCH, PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
     ObjectInputStream ois = null;
     boolean correctVer = false;
@@ -1968,6 +1979,7 @@ protected void onDestroy() {
     outState.putBoolean(BUTTON_TURN_SILENCE, mButtonTurnSilence.isChecked());
     outState.putBoolean(BUTTON_LEFT_HAND, mButtonLeftHand.isChecked());
     outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
+    outState.putBoolean(BUTTON_HORIZONTAL_PROXIMITY, mButtonHorizProx.isChecked());
     outState.putBoolean(BUTTON_FORCE_TOUCH, mButtonForceTouch == null || mButtonForceTouch.isChecked());
     outState.commit();
     init(pref);
